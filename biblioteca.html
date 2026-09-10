@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="dr-versao" content="68648ab5d802" />
+  <title>Biblioteca — Diário da República</title>
+  <meta name="description" content="Referência de identidade visual: cores, tipografia e componentes." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="favicon-32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=ba2e90da" />
+  <style>
+    /* só desta página — não faz parte do sistema de desenho da app */
+    .bib-secao { padding: 40px 0; border-top: 1px solid var(--dr-risca); }
+    .bib-secao:first-of-type { border-top: 0; }
+    .bib-titulo-secao { display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px; }
+    .bib-num { font-family: var(--dr-serif); font-size: 15px; color: var(--dr-dourado-escuro); font-weight: 700; }
+    .bib-titulo-secao h2 { margin: 0; }
+    .bib-sub { color: #4A5A6B; font-size: 13.5px; margin-top: 2px; }
+    .bib-grelha { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+    .bib-swatch { border-radius: 12px; overflow: hidden; border: 1px solid var(--dr-risca); background: #fff; }
+    .bib-swatch .cor { height: 88px; }
+    .bib-swatch .info { padding: 10px 12px; }
+    .bib-swatch .nome { font-weight: 600; font-size: 13.5px; }
+    .bib-swatch button.hex {
+      font: 500 12px/1 ui-monospace, monospace; color: #4A5A6B; background: none; border: 0;
+      padding: 3px 0 0; cursor: pointer; text-align: left;
+    }
+    .bib-swatch button.hex:hover { color: var(--dr-vinho); }
+    .bib-aviso {
+      display: flex; gap: 14px; padding: 18px 20px; border-radius: 12px;
+      background: var(--dr-vermelho-veu); border: 1px solid #F3C6CE; margin-bottom: 8px;
+    }
+    .bib-aviso b { color: var(--dr-vermelho); }
+    .bib-comparativo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+    .bib-comparativo > div { border-radius: 10px; padding: 14px 16px; }
+    .bib-antes { background: #fff; border: 1.5px dashed #F3C6CE; }
+    .bib-depois { background: #fff; border: 1.5px solid var(--dr-verde); }
+    .bib-comparativo .rotulo { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .bib-antes .rotulo { color: var(--dr-vermelho); }
+    .bib-depois .rotulo { color: var(--dr-verde); }
+    .bib-comparativo .amostra { margin-top: 10px; font-weight: 600; }
+    .bib-comparativo .medida { font-size: 12.5px; color: #4A5A6B; margin-top: 4px; font-family: ui-monospace, monospace; }
+    .bib-tipo-amostra { background: #fff; border: 1px solid var(--dr-risca); border-radius: 12px; padding: 24px; }
+    .bib-tipo-rotulo { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #4A5A6B; margin-bottom: 10px; }
+    .bib-icones { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 4px; text-align: center; }
+    .bib-icones div { padding: 14px 6px; border-radius: 10px; }
+    .bib-icones div:hover { background: var(--dr-cinza-neblina); }
+    .bib-icones .dr-icone { display: block; margin: 0 auto 8px; color: var(--dr-azul); }
+    .bib-icones span.rotulo { font-size: 11.5px; color: #4A5A6B; }
+  </style>
+</head>
+<body>
+<div class="dr-pagina">
+  <main class="dr-env" style="padding-top:var(--dr-e6)">
+
+    <!-- ══ cabeçalho da biblioteca ═══════════════════════════════════ -->
+    <header class="dr-fila" style="justify-content:space-between;flex-wrap:wrap;gap:24px;padding-bottom:32px">
+      <div class="dr-fila" style="gap:18px">
+        <img src="web/marca/dr-marca.png" alt="" width="56" height="56" style="border-radius:14px" />
+        <div>
+          <h1 style="font-size:30px">Diário da República</h1>
+          <p class="dr-suave">Biblioteca de identidade visual — só referência, não faz parte da app publicada.</p>
+        </div>
+      </div>
+      <p class="dr-suave" style="max-width:280px;text-align:right;font-size:13px">
+        INOVAÇÃO · TRANSPARÊNCIA · DESENVOLVIMENTO
+      </p>
+    </header>
+
+    <!-- ══ aviso de correção ═════════════════════════════════════════ -->
+    <div class="bib-aviso">
+      <span class="dr-icone i-documento" aria-hidden="true" style="color:var(--dr-vermelho);flex-shrink:0"></span>
+      <div>
+        <p><b>Uma cor do kit falhava o contraste mínimo.</b> O Dourado
+        (<code>#C2A45F</code>) mede só <b>2,29:1</b> sobre o Marfim — abaixo até
+        do mínimo de 3:1 para bordas/ícones, e bem abaixo do 4,5:1 que texto
+        exige (medição real, fórmula WCAG, a mesma do auditor da pp-base).</p>
+        <div class="bib-comparativo">
+          <div class="bib-antes">
+            <div class="rotulo">Antes — falha</div>
+            <div class="amostra" style="color:#C2A45F">Ver detalhes</div>
+            <div class="medida">#C2A45F sobre #F9FAFA — 2,29:1</div>
+          </div>
+          <div class="bib-depois">
+            <div class="rotulo">Depois — passa</div>
+            <div class="amostra" style="color:#7E6B3E">Ver detalhes</div>
+            <div class="medida">#7E6B3E sobre #F9FAFA — 4,95:1</div>
+          </div>
+        </div>
+        <p class="dr-suave" style="margin-top:12px;font-size:13px">
+          A correção fica como <code>--dr-dourado-escuro</code>: usa-se sempre que
+          o tom dourado é <b>texto ou borda</b> sobre um fundo claro. O
+          <code>--dr-dourado</code> original continua a existir, mas só para
+          preenchimento — logótipo, decoração, selos e estados de hover.
+        </p>
+      </div>
+    </div>
+
+    <!-- ══ 01. Cores ═════════════════════════════════════════════════ -->
+    <section class="bib-secao" id="cores">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">01</span>
+        <div><h2>Cores</h2><p class="bib-sub">Paleta corrigida — clique num hex para copiar</p></div>
+      </div>
+      <div class="bib-grelha">
+        <div class="bib-swatch">
+          <div class="cor" style="background:#F9FAFA;border-bottom:1px solid var(--dr-risca)"></div>
+          <div class="info"><div class="nome">Marfim</div>
+            <button class="hex" data-copiar="#F9FAFA">#F9FAFA</button></div>
+        </div>
+        <div class="bib-swatch">
+          <div class="cor" style="background:#002244"></div>
+          <div class="info"><div class="nome">Azul institucional</div>
+            <button class="hex" data-copiar="#002244">#002244</button></div>
+        </div>
+        <div class="bib-swatch">
+          <div class="cor" style="background:#69092D"></div>
+          <div class="info"><div class="nome">Vinho</div>
+            <button class="hex" data-copiar="#69092D">#69092D</button></div>
+        </div>
+        <div class="bib-swatch">
+          <div class="cor" style="background:#C2A45F"></div>
+          <div class="info"><div class="nome">Dourado <span style="font-weight:400;color:#4A5A6B">· só preenchimento</span></div>
+            <button class="hex" data-copiar="#C2A45F">#C2A45F</button></div>
+        </div>
+        <div class="bib-swatch">
+          <div class="cor" style="background:#7E6B3E"></div>
+          <div class="info"><div class="nome">Dourado escuro <span style="font-weight:400;color:#4A5A6B">· texto/borda</span></div>
+            <button class="hex" data-copiar="#7E6B3E">#7E6B3E</button></div>
+        </div>
+        <div class="bib-swatch">
+          <div class="cor" style="background:#EAEFF2;border-bottom:1px solid var(--dr-risca)"></div>
+          <div class="info"><div class="nome">Cinza-neblina</div>
+            <button class="hex" data-copiar="#EAEFF2">#EAEFF2</button></div>
+        </div>
+        <div class="bib-swatch">
+          <div class="cor" style="background:#7E8996"></div>
+          <div class="info"><div class="nome">Borda <span style="font-weight:400;color:#4A5A6B">· campos</span></div>
+            <button class="hex" data-copiar="#7E8996">#7E8996</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 02. Tipografia ════════════════════════════════════════════ -->
+    <section class="bib-secao" id="tipografia">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">02</span>
+        <div><h2>Tipografia</h2><p class="bib-sub">Playfair Display para títulos, Inter para o resto</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="bib-tipo-amostra">
+          <div class="bib-tipo-rotulo">Títulos — Playfair Display</div>
+          <p style="font-family:var(--dr-serif);font-size:30px;font-weight:700;line-height:1.2">
+            Desafios que transformam empresas
+          </p>
+        </div>
+        <div class="bib-tipo-amostra">
+          <div class="bib-tipo-rotulo">Corpo e interface — Inter</div>
+          <p style="font-size:17px;line-height:1.5">Informação clara, ação concreta.</p>
+          <p class="dr-suave" style="margin-top:8px;font-size:14px">
+            Texto secundário em #4A5A6B — 6,3:1 sobre o marfim.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 03. Navegação ═════════════════════════════════════════════ -->
+    <section class="bib-secao" id="navegacao">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">03</span>
+        <div><h2>Navegação</h2><p class="bib-sub">Barra principal</p></div>
+      </div>
+      <div style="border-radius:var(--dr-r-lg);overflow:hidden;box-shadow:var(--dr-sombra)">
+        <div class="dr-topo" style="position:static">
+          <div class="dr-topo-int">
+            <a class="dr-marca" href="#">
+              <img src="web/marca/dr-marca.png" alt="" />
+              Diário da República
+            </a>
+            <nav aria-label="Navegação principal">
+              <a href="#" aria-current="page">Início</a>
+              <a href="#">Publicações</a>
+              <a href="#">Editais</a>
+              <a href="#">Empresas</a>
+            </nav>
+            <div class="dr-topo-busca">
+              <span class="dr-icone dr-icone-16 i-procurar" aria-hidden="true"></span>
+              <input type="search" placeholder="Pesquisar…" />
+            </div>
+            <div class="dr-topo-acoes">
+              <button type="button" class="dr-icone-botao-topo" aria-label="Notificações">
+                <span class="dr-icone dr-icone-16 i-notificacoes" aria-hidden="true"></span>
+                <span class="dr-ponto-aviso" aria-hidden="true"></span>
+              </button>
+              <span class="dr-quem">Germano Silva</span>
+              <button type="button" class="dr-icone-botao-topo" aria-label="Conta">
+                <span class="dr-icone dr-icone-16 i-utilizador" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 04. Botões ════════════════════════════════════════════════ -->
+    <section class="bib-secao" id="botoes">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">04</span>
+        <div><h2>Botões</h2><p class="bib-sub">Estados</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+        <div>
+          <p class="bib-tipo-rotulo">Primário</p>
+          <div class="dr-fila" style="flex-direction:column;align-items:flex-start;gap:10px">
+            <button type="button" class="dr-botao"><span class="dr-icone dr-icone-16 i-mais" aria-hidden="true"></span>Publicar edital</button>
+            <button type="button" class="dr-botao" disabled><span class="dr-icone dr-icone-16 i-mais" aria-hidden="true"></span>Publicar edital</button>
+          </div>
+        </div>
+        <div>
+          <p class="bib-tipo-rotulo">Secundário</p>
+          <div class="dr-fila" style="flex-direction:column;align-items:flex-start;gap:10px">
+            <button type="button" class="dr-botao dr-botao-linha"><span class="dr-icone dr-icone-16 i-ver" aria-hidden="true"></span>Ver detalhes</button>
+            <button type="button" class="dr-botao dr-botao-linha" disabled><span class="dr-icone dr-icone-16 i-ver" aria-hidden="true"></span>Ver detalhes</button>
+          </div>
+        </div>
+        <div>
+          <p class="bib-tipo-rotulo">Terciário</p>
+          <div class="dr-fila" style="flex-direction:column;align-items:flex-start;gap:10px">
+            <button type="button" class="dr-botao dr-botao-fantasma"><span class="dr-icone dr-icone-16 i-guardar" aria-hidden="true"></span>Guardar</button>
+            <button type="button" class="dr-botao dr-botao-fantasma" disabled><span class="dr-icone dr-icone-16 i-guardar" aria-hidden="true"></span>Guardar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 05. Etiquetas ═════════════════════════════════════════════ -->
+    <section class="bib-secao" id="etiquetas">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">05</span>
+        <div><h2>Etiquetas</h2><p class="bib-sub">Estados de uma publicação</p></div>
+      </div>
+      <div class="dr-fila">
+        <span class="dr-selo dr-selo-novo"><span class="ponto"></span>Novo</span>
+        <span class="dr-selo dr-selo-em-curso"><span class="ponto"></span>Em curso</span>
+        <span class="dr-selo dr-selo-concluido"><span class="ponto"></span>Concluído</span>
+        <span class="dr-selo dr-selo-urgente"><span class="ponto"></span>Urgente</span>
+        <span class="dr-selo dr-selo-rascunho"><span class="ponto"></span>Rascunho</span>
+      </div>
+    </section>
+
+    <!-- ══ 06. Campos ════════════════════════════════════════════════ -->
+    <section class="bib-secao" id="campos">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">06</span>
+        <div><h2>Campos</h2><p class="bib-sub">Elementos de formulário</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--dr-e4)">
+        <div class="dr-campo" style="margin:0">
+          <label for="ex-titulo">Título da publicação</label>
+          <input id="ex-titulo" placeholder="Ex.: Aviso de concurso público" />
+        </div>
+        <div class="dr-campo" style="margin:0">
+          <label for="ex-empresa">Empresa</label>
+          <select id="ex-empresa"><option>Selecionar empresa</option></select>
+        </div>
+        <div class="dr-campo" style="margin:0">
+          <label for="ex-prazo">Prazo</label>
+          <input id="ex-prazo" type="date" />
+        </div>
+        <div class="dr-campo dr-busca" style="margin:0">
+          <label for="ex-pesquisa">Pesquisar publicações</label>
+          <span class="dr-icone-campo i-procurar" aria-hidden="true"></span>
+          <input id="ex-pesquisa" type="search" placeholder="Pesquisar…" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 07. Cartões ═══════════════════════════════════════════════ -->
+    <section class="bib-secao" id="cartoes">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">07</span>
+        <div><h2>Cartões</h2><p class="bib-sub">Publicação em destaque e compactos</p></div>
+      </div>
+      <div class="dr-grelha-cartoes dr-grelha-cartoes-2">
+        <article class="dr-cartao">
+          <div class="cabeca">
+            <span class="dr-selo dr-selo-novo"><span class="ponto"></span>Novo</span>
+            <button type="button" class="dr-guardar-canto" aria-label="Guardar">
+              <span class="dr-icone dr-icone-16 i-guardar" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="categoria">Sustentabilidade</p>
+          <h3>Edital de Inovação Sustentável</h3>
+          <p class="descricao">Abertura de candidaturas para soluções de redução da pegada ambiental na cadeia de produção.</p>
+          <div class="dados">
+            <span><span class="dr-icone dr-icone-16 i-empresa" aria-hidden="true"></span>Empresa Atlântico</span>
+            <span><span class="dr-icone dr-icone-16 i-calendario" aria-hidden="true"></span>Prazo: 24 Set 2026</span>
+          </div>
+          <div class="dr-progresso"><b style="width:70%"></b></div>
+          <div class="dr-progresso-rotulo">70%</div>
+          <button type="button" class="dr-botao">Ver detalhes<span class="dr-icone dr-icone-16 i-seta-direita" aria-hidden="true"></span></button>
+        </article>
+
+        <div style="display:flex;flex-direction:column;gap:var(--dr-e4)">
+          <article class="dr-cartao dr-cartao-compacto">
+            <div class="cabeca">
+              <p class="categoria" style="margin:0">Sustentabilidade</p>
+              <span class="dr-selo dr-selo-em-curso"><span class="ponto"></span>Em curso</span>
+            </div>
+            <h3>Edital de Inovação Sustentável</h3>
+            <div class="dados">
+              <span><span class="dr-icone dr-icone-16 i-empresa" aria-hidden="true"></span>Empresa Atlântico</span>
+              <span><span class="dr-icone dr-icone-16 i-calendario" aria-hidden="true"></span>24 Set 2026</span>
+            </div>
+            <div class="dr-progresso"><b style="width:40%"></b></div>
+            <div class="dr-progresso-rotulo">40%</div>
+          </article>
+          <article class="dr-cartao dr-cartao-compacto">
+            <div class="cabeca">
+              <p class="categoria" style="margin:0">Sustentabilidade</p>
+              <span class="dr-selo dr-selo-concluido"><span class="ponto"></span>Concluído</span>
+            </div>
+            <h3>Edital de Inovação Sustentável</h3>
+            <div class="dados">
+              <span><span class="dr-icone dr-icone-16 i-empresa" aria-hidden="true"></span>Empresa Atlântico</span>
+              <span><span class="dr-icone dr-icone-16 i-calendario" aria-hidden="true"></span>24 Set 2026</span>
+            </div>
+            <div class="dr-progresso"><b style="width:100%"></b></div>
+            <div class="dr-progresso-rotulo">100%</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 08. Tabela ════════════════════════════════════════════════ -->
+    <section class="bib-secao" id="tabela">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">08</span>
+        <div><h2>Tabela</h2><p class="bib-sub">Lista de publicações</p></div>
+      </div>
+      <div class="dr-tabela-envolt">
+        <table class="dr-tabela">
+          <thead>
+            <tr><th>Publicação</th><th>Empresa</th><th>Estado</th><th>Prazo</th><th>Ações</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Edital de Inovação Sustentável</td><td>Empresa Atlântico</td>
+              <td><span class="dr-selo dr-selo-concluido"><span class="ponto"></span>Concluído</span></td>
+              <td>24 Set 2026</td>
+              <td class="acoes">
+                <button type="button" class="dr-icone-botao" aria-label="Ver"><span class="dr-icone dr-icone-16 i-ver" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Editar"><span class="dr-icone dr-icone-16 i-editar" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Documento"><span class="dr-icone dr-icone-16 i-documento-2" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Apagar"><span class="dr-icone dr-icone-16 i-apagar" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Digitalização da Administração Pública</td><td>Tecnova Solutions</td>
+              <td><span class="dr-selo dr-selo-em-curso"><span class="ponto"></span>Em curso</span></td>
+              <td>12 Nov 2026</td>
+              <td class="acoes">
+                <button type="button" class="dr-icone-botao" aria-label="Ver"><span class="dr-icone dr-icone-16 i-ver" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Editar"><span class="dr-icone dr-icone-16 i-editar" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Documento"><span class="dr-icone dr-icone-16 i-documento-2" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Apagar"><span class="dr-icone dr-icone-16 i-apagar" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Mobilidade Urbana Inteligente</td><td>Cidade do Futuro</td>
+              <td><span class="dr-selo dr-selo-urgente"><span class="ponto"></span>Urgente</span></td>
+              <td>03 Out 2026</td>
+              <td class="acoes">
+                <button type="button" class="dr-icone-botao" aria-label="Ver"><span class="dr-icone dr-icone-16 i-ver" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Editar"><span class="dr-icone dr-icone-16 i-editar" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Documento"><span class="dr-icone dr-icone-16 i-documento-2" aria-hidden="true"></span></button>
+                <button type="button" class="dr-icone-botao" aria-label="Apagar"><span class="dr-icone dr-icone-16 i-apagar" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ 09. Paginação e ícones ════════════════════════════════════ -->
+    <section class="bib-secao" id="paginacao-icones">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">09</span>
+        <div><h2>Paginação e ícones</h2><p class="bib-sub">Controlo de navegação e biblioteca de ícones</p></div>
+      </div>
+
+      <p class="bib-tipo-rotulo">Paginação</p>
+      <nav class="dr-paginacao" aria-label="Paginação" style="margin-bottom:32px">
+        <button type="button" aria-label="Anterior" disabled>‹</button>
+        <button type="button" aria-current="page">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <button type="button">4</button>
+        <button type="button">5</button>
+        <span class="dr-suave" style="padding:0 4px">…</span>
+        <button type="button">10</button>
+        <button type="button" aria-label="Seguinte">›</button>
+      </nav>
+
+      <p class="bib-tipo-rotulo">Ícones principais</p>
+      <div class="bib-icones">
+        <div><span class="dr-icone i-procurar" aria-hidden="true"></span><span class="rotulo">Pesquisar</span></div>
+        <div><span class="dr-icone i-filtrar" aria-hidden="true"></span><span class="rotulo">Filtrar</span></div>
+        <div><span class="dr-icone i-calendario" aria-hidden="true"></span><span class="rotulo">Calendário</span></div>
+        <div><span class="dr-icone i-empresa" aria-hidden="true"></span><span class="rotulo">Empresa</span></div>
+        <div><span class="dr-icone i-documento" aria-hidden="true"></span><span class="rotulo">Documento</span></div>
+        <div><span class="dr-icone i-carregar" aria-hidden="true"></span><span class="rotulo">Carregar</span></div>
+        <div><span class="dr-icone i-utilizador" aria-hidden="true"></span><span class="rotulo">Utilizador</span></div>
+        <div><span class="dr-icone i-partilhar" aria-hidden="true"></span><span class="rotulo">Partilhar</span></div>
+        <div><span class="dr-icone i-guardar" aria-hidden="true"></span><span class="rotulo">Guardar</span></div>
+        <div><span class="dr-icone i-notificacoes" aria-hidden="true"></span><span class="rotulo">Avisos</span></div>
+        <div><span class="dr-icone i-ver" aria-hidden="true"></span><span class="rotulo">Ver</span></div>
+        <div><span class="dr-icone i-editar" aria-hidden="true"></span><span class="rotulo">Editar</span></div>
+        <div><span class="dr-icone i-apagar" aria-hidden="true"></span><span class="rotulo">Apagar</span></div>
+        <div><span class="dr-icone i-fechar" aria-hidden="true"></span><span class="rotulo">Fechar</span></div>
+        <div><span class="dr-icone i-mais" aria-hidden="true"></span><span class="rotulo">Mais</span></div>
+      </div>
+    </section>
+
+    <footer class="dr-suave" style="padding-top:32px;font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span>DIÁRIO DA REPÚBLICA · BIBLIOTECA DE IDENTIDADE VISUAL</span>
+      <span>NÃO PUBLICADO COM A APP</span>
+    </footer>
+  </main>
+</div>
+
+<script src="web/biblioteca/dr.js?v=9be0cd08"></script>
+</body>
+</html>
