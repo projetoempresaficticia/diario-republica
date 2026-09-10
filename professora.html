@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="dr-versao" content="62018b8a0392" />
+  <meta name="dr-versao" content="2790338e6fe2" />
   <title>Publicar atividade — Diário da República</title>
   <meta name="description" content="Publicar uma atividade obrigatória." />
   <link rel="icon" href="favicon-32.png" />
@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="web/biblioteca/dr.css?v=37f0bebf" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=6773478c" />
 </head>
 <body>
 
@@ -108,21 +108,32 @@
       </div>
 
       <div class="dr-campo">
-        <label for="tipo">Tipo de atividade</label>
-        <select id="tipo" name="tipo">
-          <option value="">Sem verificação automática (anexo)</option>
-        </select>
-        <p class="dr-suave" id="ajuda-tipo" style="font-size:13px;margin-top:6px"></p>
+        <label id="rotulo-tipos">Tipo de atividade</label>
+        <p class="dr-suave" style="font-size:13px;margin:-2px 0 10px">
+          Sem nenhuma tag escolhida, a empresa declara o cumprimento com um anexo.
+          Com uma ou mais, todas têm de estar cumpridas — a verificação é automática.
+        </p>
+        <div class="dr-tags" id="lista-tipos" role="group" aria-labelledby="rotulo-tipos">
+          <p class="dr-vazio" style="padding:var(--dr-e3)">A carregar…</p>
+        </div>
+        <p class="dr-tags-ajuda" id="tipos-escolhidos"></p>
       </div>
 
       <div class="dr-campo">
-        <label>Destinatário</label>
-        <div class="dr-fila" style="gap:var(--dr-e4)">
-          <label class="dr-fila" style="gap:6px;font-weight:400"><input type="radio" name="alvo" value="todas" checked /> Todas as empresas</label>
-          <label class="dr-fila" style="gap:6px;font-weight:400"><input type="radio" name="alvo" value="lista" /> Só estas empresas</label>
+        <label id="rotulo-alvo">Destinatário</label>
+        <div class="dr-alvo-alternador" role="group" aria-labelledby="rotulo-alvo">
+          <button type="button" class="dr-alvo-opcao" id="alvo-todas" aria-pressed="true">
+            <span class="dr-icone i-empresa" aria-hidden="true"></span>
+            Todas as empresas
+          </button>
+          <button type="button" class="dr-alvo-opcao" id="alvo-lista" aria-pressed="false">
+            <span class="dr-icone i-empresa" aria-hidden="true"></span>
+            Empresas específicas
+          </button>
         </div>
-        <textarea id="cedulas" name="cedulas" placeholder="EP-2026-00001, EP-2026-00002…" disabled
-                  style="margin-top:var(--dr-e3)"></textarea>
+        <div class="dr-lista-empresas" id="lista-empresas" hidden>
+          <p class="dr-vazio">A carregar…</p>
+        </div>
       </div>
 
       <div class="dr-campo">
@@ -140,6 +151,6 @@
 <script src="https://projetoempresaficticia.github.io/pp-base/web/comum.js"></script>
 <script src="web/biblioteca/dr.js?v=36c1688a"></script>
 <script src="web/atualizar.js?v=761aab73"></script>
-<script src="professora.js?v=a16ef73b"></script>
+<script src="professora.js?v=73b1db57"></script>
 </body>
 </html>

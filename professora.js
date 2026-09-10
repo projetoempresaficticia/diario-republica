@@ -17,25 +17,87 @@ function mostrarEntrada() {
   elEntrada.hidden = false;
 }
 
+// ── tipos de atividade: tags multi-selecionáveis ─────────────────────
+// Nada de <select> — cada tipo ativo é uma tag; tocar alterna. Zero
+// tags escolhidas = autodeclaração; uma ou mais = todas têm de estar
+// cumpridas (E lógico, decisão do Germano).
+const tiposEscolhidos = new Set();
+
+function atualizarTextoEscolhidos() {
+  const el = document.getElementById('tipos-escolhidos');
+  el.textContent = tiposEscolhidos.size === 0
+    ? 'Nenhuma tag escolhida — autodeclaração com anexo.'
+    : tiposEscolhidos.size + ' tipo(s) escolhido(s) — todos têm de ser cumpridos.';
+}
+
 async function carregarTipos() {
-  const select = document.getElementById('tipo');
+  const lista = document.getElementById('lista-tipos');
   const { data, error } = await sb
     .from('atividade_tipos').select('tipo, descricao, app_alvo')
     .eq('ativo', true).order('descricao');
-  if (error || !data) return;
-  data.forEach((t) => {
-    const opt = document.createElement('option');
-    opt.value = t.tipo;
-    opt.textContent = t.descricao + ' (' + t.app_alvo + ')';
-    select.appendChild(opt);
+  if (error || !data) {
+    lista.innerHTML = '<p class="dr-vazio">Não foi possível carregar os tipos.</p>';
+    return;
+  }
+  lista.innerHTML = data.map((t) => `
+    <button type="button" class="dr-tag" data-tipo="${esc(t.tipo)}" aria-pressed="false">
+      ${esc(t.descricao)} <span class="app">${esc(t.app_alvo)}</span>
+    </button>`).join('');
+  lista.querySelectorAll('.dr-tag').forEach((tag) => {
+    tag.addEventListener('click', () => {
+      const tipo = tag.dataset.tipo;
+      const selecionada = tag.getAttribute('aria-pressed') === 'true';
+      tag.setAttribute('aria-pressed', String(!selecionada));
+      if (selecionada) tiposEscolhidos.delete(tipo); else tiposEscolhidos.add(tipo);
+      atualizarTextoEscolhidos();
+    });
   });
-  select.addEventListener('change', () => {
-    const ajuda = document.getElementById('ajuda-tipo');
-    ajuda.textContent = select.value
-      ? 'A empresa vê sozinha se já cumpriu — sem precisar de anexar nada.'
-      : 'A empresa marca "concluída" e anexa um PDF como prova.';
+  atualizarTextoEscolhidos();
+}
+
+// ── destinatário: todas as empresas, ou uma lista escolhida ──────────
+const empresasEscolhidas = new Set();
+const btnAlvoTodas = document.getElementById('alvo-todas');
+const btnAlvoLista = document.getElementById('alvo-lista');
+const listaEmpresasEl = document.getElementById('lista-empresas');
+let empresasCarregadas = false;
+
+async function carregarEmpresas() {
+  if (empresasCarregadas) return;
+  empresasCarregadas = true;
+  const { data, error } = await sb.from('empresas').select('cedula, nome').order('nome');
+  if (error || !data) {
+    listaEmpresasEl.innerHTML = '<p class="dr-vazio">Não foi possível carregar as empresas.</p>';
+    return;
+  }
+  listaEmpresasEl.innerHTML = data.map((e) => `
+    <label class="dr-empresa-linha" data-cedula="${esc(e.cedula)}">
+      <input type="checkbox" value="${esc(e.cedula)}" />
+      <span>
+        <span class="nome" style="display:block">${esc(e.nome)}</span>
+        <span class="cedula mono">${esc(e.cedula)}</span>
+      </span>
+    </label>`).join('');
+  listaEmpresasEl.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.addEventListener('change', () => {
+      const linha = cb.closest('.dr-empresa-linha');
+      if (cb.checked) { empresasEscolhidas.add(cb.value); linha.classList.add('selecionada'); }
+      else { empresasEscolhidas.delete(cb.value); linha.classList.remove('selecionada'); }
+    });
   });
 }
+
+btnAlvoTodas.addEventListener('click', () => {
+  btnAlvoTodas.setAttribute('aria-pressed', 'true');
+  btnAlvoLista.setAttribute('aria-pressed', 'false');
+  listaEmpresasEl.hidden = true;
+});
+btnAlvoLista.addEventListener('click', async () => {
+  btnAlvoTodas.setAttribute('aria-pressed', 'false');
+  btnAlvoLista.setAttribute('aria-pressed', 'true');
+  listaEmpresasEl.hidden = false;
+  await carregarEmpresas();
+});
 
 // ── o editor de texto formatado ──────────────────────────────────────
 const editorTexto = document.getElementById('texto');
@@ -122,15 +184,6 @@ campoUrlLigacao.addEventListener('keydown', (ev) => {
   if (ev.key === 'Enter') { ev.preventDefault(); document.getElementById('btn-aplicar-ligacao').click(); }
 });
 
-// ── alvo: todas ou uma lista de cédulas ──────────────────────────────
-const campoCedulas = document.getElementById('cedulas');
-document.querySelectorAll('input[name="alvo"]').forEach((r) => {
-  r.addEventListener('change', () => {
-    campoCedulas.disabled = document.querySelector('input[name="alvo"]:checked').value !== 'lista';
-    if (!campoCedulas.disabled) campoCedulas.focus();
-  });
-});
-
 // ── publicar ──────────────────────────────────────────────────────────
 document.getElementById('form-atividade').addEventListener('submit', async (ev) => {
   ev.preventDefault();
@@ -142,11 +195,10 @@ document.getElementById('form-atividade').addEventListener('submit', async (ev) 
     mostrarMsg(msg, 'Escreva o texto da atividade.', 'erro');
     return;
   }
-  const alvoTodas = document.querySelector('input[name="alvo"]:checked').value === 'todas';
-  const cedulas = alvoTodas ? [] : campoCedulas.value.split(',')
-    .map((c) => c.trim().toUpperCase()).filter(Boolean);
+  const alvoTodas = btnAlvoTodas.getAttribute('aria-pressed') === 'true';
+  const cedulas = alvoTodas ? [] : Array.from(empresasEscolhidas);
   if (!alvoTodas && cedulas.length === 0) {
-    mostrarMsg(msg, 'Indique pelo menos uma empresa, ou escolha "Todas as empresas".', 'erro');
+    mostrarMsg(msg, 'Escolha pelo menos uma empresa, ou selecione "Todas as empresas".', 'erro');
     return;
   }
   const prazoValor = document.getElementById('prazo').value;
@@ -161,7 +213,7 @@ document.getElementById('form-atividade').addEventListener('submit', async (ev) 
   const r = await api('dr_atividade_publicar', {
     p_titulo: document.getElementById('titulo').value,
     p_texto: limparHtml(editorTexto.innerHTML),
-    p_tipo: document.getElementById('tipo').value || null,
+    p_tipos: Array.from(tiposEscolhidos),
     p_alvo_todas: alvoTodas,
     p_alvo_cedulas: cedulas,
     p_prazo: new Date(prazoValor).toISOString(),
@@ -173,7 +225,13 @@ document.getElementById('form-atividade').addEventListener('submit', async (ev) 
   form.reset();
   editorTexto.innerHTML = '';
   marcarVazioTexto();
-  campoCedulas.disabled = true;
+  tiposEscolhidos.clear();
+  document.querySelectorAll('.dr-tag[aria-pressed="true"]').forEach((t) => t.setAttribute('aria-pressed', 'false'));
+  atualizarTextoEscolhidos();
+  empresasEscolhidas.clear();
+  document.querySelectorAll('#lista-empresas input:checked').forEach((cb) => { cb.checked = false; });
+  document.querySelectorAll('.dr-empresa-linha.selecionada').forEach((l) => l.classList.remove('selecionada'));
+  btnAlvoTodas.click();
 });
 
 // ── entrar ────────────────────────────────────────────────────────────

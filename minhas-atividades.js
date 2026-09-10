@@ -21,39 +21,55 @@ function mostrarEntrada() {
   elEntrada.hidden = false;
 }
 
-function linhaAtividade(a) {
-  const info = tiposPorNome[a.tipo];
-  let acao = '';
-
-  if (a.cumprida) {
-    acao = `<div class="dr-justificativa" style="margin-top:var(--dr-e3)">${esc(textoDaProva(a.prova))}</div>`;
-  } else if (a.tipo) {
-    acao = info && info.link_sugerido
-      ? `<a class="dr-botao dr-botao-pequeno" style="margin-top:var(--dr-e3)"
-           href="${esc(info.link_sugerido)}" target="_blank" rel="noopener">
-           Ir para ${esc(info.app_alvo)}</a>`
-      : '';
-  } else {
-    acao = `<button type="button" class="dr-botao dr-botao-pequeno" style="margin-top:var(--dr-e3)"
-              data-declarar="${esc(a.id)}">Declarar cumprimento</button>`;
+// Uma entrada de `provas`: {tipo, cumprida, prova}. `tipo === null` é a
+// autodeclaração; qualquer outro valor é um tipo do catálogo (verifica-se
+// sozinho). Cada uma vira uma mini-linha dentro do cartão.
+function linhaProva(p, atividadeId) {
+  if (p.tipo === null) {
+    if (p.cumprida) {
+      return `<div class="dr-justificativa" style="margin-top:var(--dr-e3)">${esc(textoDaProva(p.prova))}</div>`;
+    }
+    return `<button type="button" class="dr-botao dr-botao-pequeno" style="margin-top:var(--dr-e3)"
+              data-declarar="${esc(atividadeId)}">Declarar cumprimento</button>`;
   }
 
+  const info = tiposPorNome[p.tipo];
+  const descricao = info ? info.descricao : p.tipo;
+  if (p.cumprida) {
+    return `
+      <div class="dr-fila" style="margin-top:var(--dr-e3);justify-content:space-between">
+        <span class="dr-selo dr-selo-concluido"><span class="ponto"></span>${esc(descricao)}</span>
+        <span class="dr-suave" style="font-size:12.5px">${esc(textoDaProva(p.prova))}</span>
+      </div>`;
+  }
+  return `
+    <div class="dr-fila" style="margin-top:var(--dr-e3);justify-content:space-between">
+      <span class="dr-selo dr-selo-em-curso"><span class="ponto"></span>${esc(descricao)}</span>
+      ${info && info.link_sugerido
+        ? `<a class="dr-botao dr-botao-linha dr-botao-pequeno"
+             href="${esc(info.link_sugerido)}" target="_blank" rel="noopener">Ir para ${esc(info.app_alvo)}</a>`
+        : ''}
+    </div>`;
+}
+
+function linhaAtividade(a) {
+  const provas = a.provas || [];
   return `
     <article class="dr-cartao" style="margin-bottom:var(--dr-e4)">
       <div class="cabeca">
         <h3>${esc(a.titulo)}</h3>
         ${seloAtividade(a)}
       </div>
-      <div class="descricao">${limparHtml(a.texto)}</div>
+      <div class="descricao dr-corpo">${limparHtml(a.texto)}</div>
       <p class="dr-suave" style="font-size:13px;margin-top:var(--dr-e2)">
         Prazo: ${esc(formatarData(a.prazo))}
       </p>
-      ${acao}
+      ${provas.map((p) => linhaProva(p, a.id)).join('')}
     </article>`;
 }
 
 async function carregarTiposCatalogo() {
-  const { data } = await sb.from('atividade_tipos').select('tipo, link_sugerido, app_alvo');
+  const { data } = await sb.from('atividade_tipos').select('tipo, descricao, link_sugerido, app_alvo');
   (data || []).forEach((t) => { tiposPorNome[t.tipo] = t; });
 }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="dr-versao" content="62018b8a0392" />
+  <meta name="dr-versao" content="2790338e6fe2" />
   <title>Biblioteca — Diário da República</title>
   <meta name="description" content="Referência de identidade visual: cores, tipografia e componentes." />
   <meta name="robots" content="noindex" />
@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="web/biblioteca/dr.css?v=37f0bebf" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=6773478c" />
   <style>
     /* só desta página — não faz parte do sistema de desenho da app */
     .bib-secao { padding: 40px 0; border-top: 1px solid var(--dr-risca); }
@@ -81,7 +81,7 @@
         do mínimo de 3:1 para bordas/ícones, e bem abaixo do 4,5:1 que texto
         exige (medição real, fórmula WCAG, a mesma do auditor da pp-base).</p>
         <div class="bib-comparativo">
-          <div class="bib-antes">
+          <div class="bib-antes" data-contraste-proposital>
             <div class="rotulo">Antes — falha</div>
             <div class="amostra" style="color:#C2A45F">Ver detalhes</div>
             <div class="medida">#C2A45F sobre #F9FAFA — 2,29:1</div>
@@ -424,6 +424,89 @@
         <div><span class="dr-icone i-apagar" aria-hidden="true"></span><span class="rotulo">Apagar</span></div>
         <div><span class="dr-icone i-fechar" aria-hidden="true"></span><span class="rotulo">Fechar</span></div>
         <div><span class="dr-icone i-mais" aria-hidden="true"></span><span class="rotulo">Mais</span></div>
+      </div>
+    </section>
+
+    <!-- ══ 10. Formatação de texto ═══════════════════════════════════ -->
+    <section class="bib-secao" id="formatacao">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">10</span>
+        <div><h2>Formatação de texto</h2><p class="bib-sub">Barra de ferramentas e editor — usados em "Publicar atividade"</p></div>
+      </div>
+      <div style="max-width:640px">
+        <div class="dr-ferramentas" role="toolbar" aria-label="Formatação">
+          <button type="button" class="b" aria-label="Negrito" aria-pressed="true">B</button>
+          <button type="button" class="i" aria-label="Itálico" aria-pressed="false">I</button>
+          <button type="button" class="u" aria-label="Sublinhado" aria-pressed="false">U</button>
+          <span class="risca" aria-hidden="true"></span>
+          <button type="button" aria-label="Lista" aria-pressed="false">•</button>
+          <button type="button" aria-label="Lista numerada" aria-pressed="false">1.</button>
+          <button type="button" aria-label="Citação">&#8220;</button>
+          <span class="risca" aria-hidden="true"></span>
+          <button type="button" aria-label="Inserir ligação">
+            <span class="dr-icone dr-icone-16 i-partilhar" aria-hidden="true"></span>
+          </button>
+          <button type="button" aria-label="Tirar a ligação">&#8856;</button>
+          <button type="button" aria-label="Limpar a formatação">T<sub>x</sub></button>
+        </div>
+        <div class="dr-editor" contenteditable="true" role="textbox" aria-multiline="true">
+          <p><strong>Negrito ativo</strong> — o botão B acima está pressionado (fundo vinho sólido,
+          não só mudança de cor de texto: é essa a diferença que torna o estado óbvio).</p>
+        </div>
+        <p class="bib-tipo-rotulo" style="margin-top:24px">Linha de ligação (ao clicar "Inserir ligação")</p>
+        <div class="dr-ligacao" style="position:static">
+          <input type="url" placeholder="https://…" value="https://exemplo.pt" readonly />
+          <button type="button" class="dr-botao dr-botao-pequeno">Aplicar</button>
+          <button type="button" class="dr-botao dr-botao-linha dr-botao-pequeno">Cancelar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 11. Seletores ═════════════════════════════════════════════ -->
+    <section class="bib-secao" id="seletores">
+      <div class="bib-titulo-secao">
+        <span class="bib-num">11</span>
+        <div><h2>Seletores</h2><p class="bib-sub">Tags multi-selecionáveis, alternador e lista de escolha — usados em "Publicar atividade"</p></div>
+      </div>
+
+      <p class="bib-tipo-rotulo">Tags de tipo (multi-seleção)</p>
+      <p class="dr-suave" style="font-size:13px;margin:-4px 0 12px">
+        Não selecionada = contorno dourado-escuro (mesma linguagem do botão secundário).
+        Selecionada = preenchimento vinho sólido (mesma linguagem do botão primário) — nunca só uma mudança de cor de texto.
+      </p>
+      <div class="dr-tags" role="group" aria-label="Exemplo de tipos" style="margin-bottom:8px">
+        <button type="button" class="dr-tag" aria-pressed="false">Emitir a certidão permanente <span class="app">cartorio</span></button>
+        <button type="button" class="dr-tag" aria-pressed="true">Publicar uma vaga de emprego <span class="app">talentos</span></button>
+        <button type="button" class="dr-tag" aria-pressed="true">Pagar o salário de um funcionário <span class="app">prepacoin</span></button>
+        <button type="button" class="dr-tag" aria-pressed="false">Registar a empresa no Cartório <span class="app">cartorio</span></button>
+      </div>
+      <p class="dr-tags-ajuda">2 tipo(s) escolhido(s) — todos têm de ser cumpridos.</p>
+
+      <p class="bib-tipo-rotulo" style="margin-top:32px">Alternador de destinatário</p>
+      <div style="max-width:520px">
+        <div class="dr-alvo-alternador">
+          <button type="button" class="dr-alvo-opcao" aria-pressed="false">
+            <span class="dr-icone i-empresa" aria-hidden="true"></span>
+            Todas as empresas
+          </button>
+          <button type="button" class="dr-alvo-opcao" aria-pressed="true">
+            <span class="dr-icone i-empresa" aria-hidden="true"></span>
+            Empresas específicas
+          </button>
+        </div>
+        <p class="bib-tipo-rotulo" style="margin-top:24px">Lista de empresas (aparece só com "Empresas específicas")</p>
+        <div class="dr-lista-empresas">
+          <label class="dr-empresa-linha selecionada">
+            <input type="checkbox" checked readonly />
+            <span><span class="nome" style="display:block">Padaria Central</span>
+              <span class="cedula mono">EP-2026-00003</span></span>
+          </label>
+          <label class="dr-empresa-linha">
+            <input type="checkbox" readonly />
+            <span><span class="nome" style="display:block">Autoridade Tributária</span>
+              <span class="cedula mono">EP-2026-00006</span></span>
+          </label>
+        </div>
       </div>
     </section>
 
