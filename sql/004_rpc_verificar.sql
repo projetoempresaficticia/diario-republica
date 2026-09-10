@@ -28,7 +28,7 @@ declare
   r record;
   v_cumprida boolean;
   v_prova jsonb;
-  v_decl record;
+  v_decl jsonb;
 begin
   if v_empresa is null then
     return jsonb_build_object('ok', false, 'erro', 'Sem empresa associada.');
@@ -89,13 +89,13 @@ begin
        order by t.criada_em desc limit 1;
 
     elsif r.tipo = 'assinar_documento' then
-      select jsonb_build_object('criada_em', d.criada_em)
+      select jsonb_build_object('criada_em', d.criado_em)
         into v_prova
         from public.documentos d
         join public.documento_slots ds on ds.documento_id = d.id
        where ds.empresa_esperada = v_empresa and d.estado = 'completo'
-         and d.criada_em >= r.criada_em
-       order by d.criada_em desc limit 1;
+         and d.criado_em >= r.criada_em
+       order by d.criado_em desc limit 1;
     end if;
 
     v_cumprida := v_prova is not null;
@@ -107,7 +107,7 @@ begin
        where ad.atividade_id = r.id and ad.empresa_cedula = v_empresa;
       if found then
         v_cumprida := true;
-        v_prova := to_jsonb(v_decl);
+        v_prova := v_decl;
       end if;
     end if;
 
