@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="dr-versao" content="56833c0007dd" />
+  <title>As minhas atividades — Diário da República</title>
+  <meta name="description" content="Atividades obrigatórias da sua empresa." />
+  <link rel="icon" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=a591d9f2" />
+</head>
+<body>
+
+<!-- ══ a verificar sessão ══════════════════════════════════════════════ -->
+<div class="dr-a-verificar" id="a-verificar"><p class="dr-vazio">A verificar sessão…</p></div>
+
+<!-- ══ PORTÃO DE ENTRADA ═════════════════════════════════════════════════ -->
+<div class="dr-entrada" id="entrada" hidden>
+  <div class="dr-entrada-cartao">
+    <div class="dr-entrada-marca">
+      <picture>
+        <source srcset="web/marca/dr-marca.webp" type="image/webp" />
+        <img src="web/marca/dr-marca.png" alt="" />
+      </picture>
+      <div>
+        <b>Diário da República</b>
+        <small>Área da empresa</small>
+      </div>
+    </div>
+    <form id="form-login">
+      <div class="dr-campo">
+        <label for="email">Email de login</label>
+        <input id="email" name="email" type="email" required autocomplete="username"
+               placeholder="nome@prepara.pt" />
+      </div>
+      <div class="dr-campo dr-campo-senha" style="margin:0">
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" required autocomplete="current-password"
+               placeholder="A sua senha" />
+        <button type="button" class="dr-ver-senha" id="btn-ver-senha"
+                aria-pressed="false" aria-controls="senha">Mostrar</button>
+      </div>
+      <p class="dr-msg" style="margin-top:var(--dr-e3)"></p>
+      <button type="submit" class="dr-botao" style="width:100%;margin-top:var(--dr-e4)">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══ PAINEL ══════════════════════════════════════════════════════════ -->
+<div class="dr-pagina" id="painel" hidden>
+  <header id="topo"></header>
+
+  <main class="dr-env" style="max-width:760px">
+    <h1 style="margin-bottom:var(--dr-e5)">As minhas atividades</h1>
+    <div id="lista">
+      <p class="dr-vazio">A carregar…</p>
+    </div>
+  </main>
+</div>
+
+<!-- ══ DECLARAR (só atividades sem verificação automática) ═════════════ -->
+<dialog id="janela-declarar" aria-labelledby="titulo-declarar">
+  <div class="dr-janela-cabeca">
+    <h2 id="titulo-declarar">Declarar cumprimento</h2>
+    <button type="button" class="dr-icone-botao" data-fechar="janela-declarar" aria-label="Fechar">
+      <span class="dr-icone i-fechar" aria-hidden="true"></span>
+    </button>
+  </div>
+  <form id="form-declarar">
+    <div class="dr-janela-corpo">
+      <p class="dr-suave" style="margin-bottom:var(--dr-e4)">
+        Esta atividade não tem verificação automática — anexe um documento como prova.
+      </p>
+      <label class="dr-campo" style="margin:0">
+        <span class="dr-so-leitores">Anexo</span>
+        <input id="ficheiro-declaracao" name="anexo" type="file" accept="application/pdf" required />
+      </label>
+      <p class="dr-msg" style="margin-top:var(--dr-e3)"></p>
+    </div>
+    <div class="dr-janela-pe">
+      <button type="submit" class="dr-botao" style="width:100%">Enviar e marcar como concluída</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://projetoempresaficticia.github.io/pp-base/web/comum.js"></script>
+<script src="web/biblioteca/dr.js?v=36c1688a"></script>
+<script src="web/atualizar.js?v=761aab73"></script>
+<script src="minhas-atividades.js?v=9933032b"></script>
+</body>
+</html>

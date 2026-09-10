@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="dr-versao" content="56833c0007dd" />
+  <title>Publicar atividade — Diário da República</title>
+  <meta name="description" content="Publicar uma atividade obrigatória." />
+  <link rel="icon" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=a591d9f2" />
+</head>
+<body>
+
+<!-- ══ a verificar sessão — evita mostrar o portão a quem já tem sessão ══ -->
+<div class="dr-a-verificar" id="a-verificar"><p class="dr-vazio">A verificar sessão…</p></div>
+
+<!-- ══ PORTÃO DE ENTRADA (só professora) ═══════════════════════════════ -->
+<div class="dr-entrada" id="entrada" hidden>
+  <div class="dr-entrada-cartao">
+    <div class="dr-entrada-marca">
+      <picture>
+        <source srcset="web/marca/dr-marca.webp" type="image/webp" />
+        <img src="web/marca/dr-marca.png" alt="" />
+      </picture>
+      <div>
+        <b>Diário da República</b>
+        <small>Área da professora</small>
+      </div>
+    </div>
+    <form id="form-login">
+      <div class="dr-campo">
+        <label for="email">Email de login</label>
+        <input id="email" name="email" type="email" required autocomplete="username"
+               placeholder="nome@prepara.pt" />
+      </div>
+      <div class="dr-campo dr-campo-senha" style="margin:0">
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" required autocomplete="current-password"
+               placeholder="A sua senha" />
+        <button type="button" class="dr-ver-senha" id="btn-ver-senha"
+                aria-pressed="false" aria-controls="senha">Mostrar</button>
+      </div>
+      <p class="dr-msg" style="margin-top:var(--dr-e3)"></p>
+      <button type="submit" class="dr-botao" style="width:100%;margin-top:var(--dr-e4)">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══ PAINEL ══════════════════════════════════════════════════════════ -->
+<div class="dr-pagina" id="painel" hidden>
+  <header id="topo"></header>
+
+  <main class="dr-env" style="max-width:760px">
+    <h1 style="margin-bottom:var(--dr-e5)">Publicar atividade</h1>
+
+    <form id="form-atividade">
+      <div class="dr-campo">
+        <label for="titulo">Título</label>
+        <input id="titulo" name="titulo" type="text" required maxlength="200"
+               placeholder="Ex.: Publicar uma vaga esta semana" />
+      </div>
+
+      <div class="dr-campo" style="margin-bottom:var(--dr-e4)">
+        <label for="texto" id="rotulo-texto">Texto da atividade</label>
+
+        <div class="dr-ferramentas" role="toolbar" aria-label="Formatação">
+          <button type="button" class="b" data-cmd="bold" title="Negrito (Ctrl+B)"
+                  aria-label="Negrito" aria-pressed="false">B</button>
+          <button type="button" class="i" data-cmd="italic" title="Itálico (Ctrl+I)"
+                  aria-label="Itálico" aria-pressed="false">I</button>
+          <button type="button" class="u" data-cmd="underline" title="Sublinhado (Ctrl+U)"
+                  aria-label="Sublinhado" aria-pressed="false">U</button>
+
+          <span class="risca" aria-hidden="true"></span>
+
+          <button type="button" data-cmd="insertUnorderedList" title="Lista"
+                  aria-label="Lista" aria-pressed="false">•</button>
+          <button type="button" data-cmd="insertOrderedList" title="Lista numerada"
+                  aria-label="Lista numerada" aria-pressed="false">1.</button>
+          <button type="button" data-cmd="formatBlock:blockquote" title="Citação"
+                  aria-label="Citação">&#8220;</button>
+
+          <span class="risca" aria-hidden="true"></span>
+
+          <button type="button" id="btn-ligacao" title="Inserir ligação" aria-label="Inserir ligação">
+            <span class="dr-icone dr-icone-16 i-partilhar" aria-hidden="true"></span>
+          </button>
+          <button type="button" data-cmd="unlink" title="Tirar a ligação" aria-label="Tirar a ligação">&#8856;</button>
+          <button type="button" data-cmd="removeFormat" title="Limpar a formatação"
+                  aria-label="Limpar a formatação">T<sub>x</sub></button>
+        </div>
+
+        <div class="dr-ligacao" id="linha-ligacao" hidden>
+          <label class="dr-so-leitores" for="url-ligacao">Endereço</label>
+          <input id="url-ligacao" type="url" placeholder="https://…" />
+          <button type="button" class="dr-botao dr-botao-pequeno" id="btn-aplicar-ligacao">Aplicar</button>
+          <button type="button" class="dr-botao dr-botao-linha dr-botao-pequeno" id="btn-cancelar-ligacao">Cancelar</button>
+        </div>
+
+        <div class="dr-editor" id="texto" contenteditable="true" role="textbox"
+             aria-multiline="true" aria-labelledby="rotulo-texto"
+             data-dica="O que as empresas têm de fazer." data-vazio="true"></div>
+      </div>
+
+      <div class="dr-campo">
+        <label for="tipo">Tipo de atividade</label>
+        <select id="tipo" name="tipo">
+          <option value="">Sem verificação automática (anexo)</option>
+        </select>
+        <p class="dr-suave" id="ajuda-tipo" style="font-size:13px;margin-top:6px"></p>
+      </div>
+
+      <div class="dr-campo">
+        <label>Destinatário</label>
+        <div class="dr-fila" style="gap:var(--dr-e4)">
+          <label class="dr-fila" style="gap:6px;font-weight:400"><input type="radio" name="alvo" value="todas" checked /> Todas as empresas</label>
+          <label class="dr-fila" style="gap:6px;font-weight:400"><input type="radio" name="alvo" value="lista" /> Só estas empresas</label>
+        </div>
+        <textarea id="cedulas" name="cedulas" placeholder="EP-2026-00001, EP-2026-00002…" disabled
+                  style="margin-top:var(--dr-e3)"></textarea>
+      </div>
+
+      <div class="dr-campo">
+        <label for="prazo">Prazo</label>
+        <input id="prazo" name="prazo" type="datetime-local" required />
+      </div>
+
+      <p class="dr-msg" id="msg-atividade"></p>
+      <button type="submit" class="dr-botao">Publicar atividade</button>
+    </form>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://projetoempresaficticia.github.io/pp-base/web/comum.js"></script>
+<script src="web/biblioteca/dr.js?v=36c1688a"></script>
+<script src="web/atualizar.js?v=761aab73"></script>
+<script src="professora.js?v=a16ef73b"></script>
+</body>
+</html>

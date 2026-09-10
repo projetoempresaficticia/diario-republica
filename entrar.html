@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="dr-versao" content="56833c0007dd" />
+  <title>Entrar — Diário da República</title>
+  <meta name="description" content="Entrar na sua conta." />
+  <link rel="icon" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=a591d9f2" />
+</head>
+<body>
+
+<div class="dr-entrada" id="entrada">
+  <div class="dr-entrada-cartao">
+    <div class="dr-entrada-marca">
+      <picture>
+        <source srcset="web/marca/dr-marca.webp" type="image/webp" />
+        <img src="web/marca/dr-marca.png" alt="" />
+      </picture>
+      <div>
+        <b>Diário da República</b>
+        <small>Entrar</small>
+      </div>
+    </div>
+    <form id="form-login">
+      <div class="dr-campo">
+        <label for="email">Email de login</label>
+        <input id="email" name="email" type="email" required autocomplete="username"
+               placeholder="nome@prepara.pt" />
+      </div>
+      <div class="dr-campo dr-campo-senha" style="margin:0">
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" required autocomplete="current-password"
+               placeholder="A sua senha" />
+        <button type="button" class="dr-ver-senha" id="btn-ver-senha"
+                aria-pressed="false" aria-controls="senha">Mostrar</button>
+      </div>
+      <p class="dr-msg" style="margin-top:var(--dr-e3)"></p>
+      <button type="submit" class="dr-botao" style="width:100%;margin-top:var(--dr-e4)">Entrar</button>
+    </form>
+    <p class="dr-suave" style="margin-top:var(--dr-e4);text-align:center;font-size:13.5px">
+      <a id="link-voltar" href="index.html">Voltar sem entrar</a>
+    </p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://projetoempresaficticia.github.io/pp-base/web/comum.js"></script>
+<script src="web/biblioteca/dr.js?v=36c1688a"></script>
+<script src="web/atualizar.js?v=761aab73"></script>
+<script src="entrar.js?v=bb7a704c"></script>
+</body>
+</html>

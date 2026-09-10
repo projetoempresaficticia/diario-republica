@@ -141,6 +141,15 @@ a { color: var(--dr-vinho); }
 }
 .dr-icone-botao:hover { background: var(--dr-cinza-neblina); color: var(--dr-azul); }
 
+/* texto ou botão que só precisa de se parecer com uma ligação — fora do
+   cabeçalho, onde `.dr-topo nav button.link` já resolve isto sozinho. */
+.link {
+  background: none; border: 0; padding: 0; margin: 0; font: inherit;
+  color: var(--dr-vinho); cursor: pointer; text-decoration: none;
+  display: inline; -webkit-appearance: none; appearance: none;
+}
+.link:hover { text-decoration: underline; }
+
 /* ── 06. campos ───────────────────────────────────────────────────── */
 .dr-campo { margin-bottom: var(--dr-e4); }
 .dr-campo label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; color: var(--dr-azul); }
@@ -189,6 +198,7 @@ a { color: var(--dr-vinho); }
 .i-apagar      { --i: url(../icones/apagar.svg); }
 .i-seta-direita{ --i: url(../icones/seta-direita.svg); }
 .i-seta-baixo  { --i: url(../icones/seta-baixo.svg); }
+.i-sair        { --i: url(../icones/sair.svg); }
 
 /* ── 05. etiquetas ────────────────────────────────────────────────── */
 .dr-selo { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px;
@@ -216,6 +226,10 @@ a { color: var(--dr-vinho); }
 .dr-cartao .dados { display: flex; gap: var(--dr-e4); flex-wrap: wrap; font-size: 13px;
   color: #4A5A6B; margin-bottom: var(--dr-e3); }
 .dr-cartao .dados span { display: inline-flex; align-items: center; gap: 6px; }
+.dr-justificativa {
+  padding: var(--dr-e3) var(--dr-e4); border-radius: var(--dr-r);
+  background: var(--dr-cinza-neblina); font-size: 13.5px; line-height: 1.5;
+}
 .dr-guardar-canto {
   position: absolute; top: var(--dr-e4); right: var(--dr-e4);
   width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--dr-cinza-neblina);
@@ -288,6 +302,14 @@ dialog::backdrop { background: rgba(0,17,34,.5); }
 .dr-entrada-marca img { width: 46px; height: 46px; border-radius: 12px; }
 .dr-entrada-marca b { font-family: var(--dr-serif); font-size: 21px; }
 .dr-entrada-marca small { display: block; font-weight: 400; font-size: 12.5px; color: #4A5A6B; margin-top: 2px; }
+.dr-campo-senha { position: relative; }
+.dr-campo-senha input { padding-right: 96px; }
+.dr-ver-senha {
+  position: absolute; right: 6px; bottom: 6px; height: 34px; padding: 0 11px;
+  border: 0; border-radius: 9px; background: transparent; color: var(--dr-vinho);
+  font: 500 13px/1 var(--dr-fonte); cursor: pointer;
+}
+.dr-ver-senha:hover { background: var(--dr-cinza-neblina); }
 
 @media (max-width: 640px) {
   .dr-topo-busca input { width: 150px; }

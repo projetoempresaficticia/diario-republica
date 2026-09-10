@@ -3,25 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="dr-versao" content="68648ab5d802" />
+  <meta name="dr-versao" content="56833c0007dd" />
   <title>Diário da República</title>
-  <meta name="description" content="Publicações oficiais, editais e avisos legais do ecossistema Prepara Portugal." />
+  <meta name="description" content="Atividades oficiais do ecossistema Prepara Portugal." />
   <link rel="icon" href="favicon-32.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="web/biblioteca/dr.css?v=ba2e90da" />
+  <link rel="stylesheet" href="web/biblioteca/dr.css?v=a591d9f2" />
 </head>
 <body>
 <div class="dr-pagina">
-  <main class="dr-env" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100svh;text-align:center;gap:14px">
-    <img src="web/marca/dr-marca.png" alt="" width="64" height="64" style="border-radius:16px" />
-    <h1>Diário da República</h1>
-    <p class="dr-suave">A app está em construção.</p>
+  <header id="topo"></header>
+
+  <main class="dr-env">
+    <h1 style="margin-bottom:6px">Atividades</h1>
+    <p class="dr-suave" style="margin-bottom:var(--dr-e5)">
+      O que está publicado para todas as empresas do ecossistema.
+    </p>
+
+    <div id="lista">
+      <p class="dr-vazio">A carregar…</p>
+    </div>
   </main>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://projetoempresaficticia.github.io/pp-base/web/comum.js"></script>
+<script src="web/biblioteca/dr.js?v=36c1688a"></script>
 <script src="web/atualizar.js?v=761aab73"></script>
+<script src="app.js?v=519b7c3e"></script>
 </body>
 </html>
