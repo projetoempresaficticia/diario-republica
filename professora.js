@@ -59,7 +59,9 @@ async function carregarTipos() {
 const empresasEscolhidas = new Set();
 const btnAlvoTodas = document.getElementById('alvo-todas');
 const btnAlvoLista = document.getElementById('alvo-lista');
+const blocoListaEmpresasEl = document.getElementById('bloco-lista-empresas');
 const listaEmpresasEl = document.getElementById('lista-empresas');
+const buscaEmpresasEl = document.getElementById('busca-empresas');
 let empresasCarregadas = false;
 
 async function carregarEmpresas() {
@@ -71,7 +73,8 @@ async function carregarEmpresas() {
     return;
   }
   listaEmpresasEl.innerHTML = data.map((e) => `
-    <label class="dr-empresa-linha" data-cedula="${esc(e.cedula)}">
+    <label class="dr-empresa-linha" data-cedula="${esc(e.cedula)}"
+            data-busca="${esc((e.nome + ' ' + e.cedula).toLowerCase())}">
       <input type="checkbox" value="${esc(e.cedula)}" />
       <span>
         <span class="nome" style="display:block">${esc(e.nome)}</span>
@@ -87,15 +90,25 @@ async function carregarEmpresas() {
   });
 }
 
+// Filtro em cima dos dados já carregados — sem tamanho a sério ainda
+// (6 empresas de teste), mas o catálogo real do ecossistema chega às
+// ~200, e uma checklist sem busca fica lenta de percorrer à mão.
+buscaEmpresasEl.addEventListener('input', () => {
+  const termo = buscaEmpresasEl.value.trim().toLowerCase();
+  listaEmpresasEl.querySelectorAll('.dr-empresa-linha').forEach((linha) => {
+    linha.hidden = termo !== '' && !linha.dataset.busca.includes(termo);
+  });
+});
+
 btnAlvoTodas.addEventListener('click', () => {
   btnAlvoTodas.setAttribute('aria-pressed', 'true');
   btnAlvoLista.setAttribute('aria-pressed', 'false');
-  listaEmpresasEl.hidden = true;
+  blocoListaEmpresasEl.hidden = true;
 });
 btnAlvoLista.addEventListener('click', async () => {
   btnAlvoTodas.setAttribute('aria-pressed', 'false');
   btnAlvoLista.setAttribute('aria-pressed', 'true');
-  listaEmpresasEl.hidden = false;
+  blocoListaEmpresasEl.hidden = false;
   await carregarEmpresas();
 });
 
@@ -231,6 +244,8 @@ document.getElementById('form-atividade').addEventListener('submit', async (ev) 
   empresasEscolhidas.clear();
   document.querySelectorAll('#lista-empresas input:checked').forEach((cb) => { cb.checked = false; });
   document.querySelectorAll('.dr-empresa-linha.selecionada').forEach((l) => l.classList.remove('selecionada'));
+  buscaEmpresasEl.value = '';
+  document.querySelectorAll('.dr-empresa-linha[hidden]').forEach((l) => { l.hidden = false; });
   btnAlvoTodas.click();
 });
 
