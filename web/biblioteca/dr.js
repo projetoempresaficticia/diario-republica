@@ -143,6 +143,11 @@ async function montarTopo(paginaAtual, ctx) {
              ${paginaAtual === areaPropria.href ? 'aria-current="page"' : ''}>
             ${esc(areaPropria.nome)}
           </a>
+          ${ehProfessor ? `
+            <a href="${comVersao('acompanhar.html')}"
+               ${paginaAtual === 'acompanhar.html' ? 'aria-current="page"' : ''}>
+              Acompanhar
+            </a>` : ''}
           <span class="dr-quem">${esc(ctx.empresa ? ctx.empresa.nome : ctx.pessoa.nome)}</span>
           <button type="button" class="link" id="btn-sair-topo">
             <span class="dr-icone dr-icone-16 i-sair" aria-hidden="true"></span>Sair
