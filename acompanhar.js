@@ -25,15 +25,22 @@ async function carregarTiposCatalogo() {
   (data || []).forEach((t) => { tiposPorNome[t.tipo] = t; });
 }
 
-// Uma pill por prova — igual em espírito ao selo usado em
-// "As minhas atividades", só que aqui aparece uma linha por empresa.
-function pillProva(p) {
+// Um bloco por prova: o selo (tag de estado), o protocolo/referência
+// quando existe, e o botão para abrir o documento real — "cumprida" sozinho
+// não prova nada, o que convence é o número e o ficheiro por trás dele.
+function blocoProva(p) {
   const label = p.tipo === null
     ? (p.cumprida ? 'Anexo entregue' : 'Por declarar')
     : (tiposPorNome[p.tipo] ? tiposPorNome[p.tipo].descricao : p.tipo);
   const classe = p.cumprida ? 'dr-selo-concluido' : 'dr-selo-em-curso';
-  return `<span class="dr-selo ${classe}" style="margin:2px 4px 2px 0">
-    <span class="ponto"></span>${esc(label)}</span>`;
+  const detalhe = textoDaProva(p.prova);
+  const botao = botaoVerDocumento(p.prova);
+  return `
+    <div style="margin-bottom:8px">
+      <span class="dr-selo ${classe}"><span class="ponto"></span>${esc(label)}</span>
+      ${detalhe ? `<div class="dr-suave" style="font-size:12.5px;margin-top:3px">${esc(detalhe)}</div>` : ''}
+      ${botao ? `<div style="margin-top:4px">${botao}</div>` : ''}
+    </div>`;
 }
 
 function linhaEmpresa(e, atividade) {
@@ -45,7 +52,7 @@ function linhaEmpresa(e, atividade) {
       <td>${esc(e.nome)}</td>
       <td class="mono">${esc(e.cedula)}</td>
       <td><span class="dr-selo ${classeSelo}"><span class="ponto"></span>${textoSelo}</span></td>
-      <td>${e.provas.map(pillProva).join('')}</td>
+      <td>${e.provas.map(blocoProva).join('')}</td>
     </tr>`;
 }
 
@@ -97,6 +104,7 @@ async function carregar() {
       btn.textContent = aberta ? 'Ver empresas' : 'Ocultar empresas';
     });
   });
+  ligarBotoesDocumento(elLista);
 }
 
 // ── entrar ────────────────────────────────────────────────────────────

@@ -27,7 +27,10 @@ function mostrarEntrada() {
 function linhaProva(p, atividadeId) {
   if (p.tipo === null) {
     if (p.cumprida) {
-      return `<div class="dr-justificativa" style="margin-top:var(--dr-e3)">${esc(textoDaProva(p.prova))}</div>`;
+      const botao = botaoVerDocumento(p.prova);
+      return `
+        <div class="dr-justificativa" style="margin-top:var(--dr-e3)">${esc(textoDaProva(p.prova))}</div>
+        ${botao ? `<div style="margin-top:6px">${botao}</div>` : ''}`;
     }
     return `<button type="button" class="dr-botao dr-botao-pequeno" style="margin-top:var(--dr-e3)"
               data-declarar="${esc(atividadeId)}">Declarar cumprimento</button>`;
@@ -36,10 +39,14 @@ function linhaProva(p, atividadeId) {
   const info = tiposPorNome[p.tipo];
   const descricao = info ? info.descricao : p.tipo;
   if (p.cumprida) {
+    const botao = botaoVerDocumento(p.prova);
     return `
-      <div class="dr-fila" style="margin-top:var(--dr-e3);justify-content:space-between">
-        <span class="dr-selo dr-selo-concluido"><span class="ponto"></span>${esc(descricao)}</span>
-        <span class="dr-suave" style="font-size:12.5px">${esc(textoDaProva(p.prova))}</span>
+      <div style="margin-top:var(--dr-e3)">
+        <div class="dr-fila" style="justify-content:space-between">
+          <span class="dr-selo dr-selo-concluido"><span class="ponto"></span>${esc(descricao)}</span>
+          <span class="dr-suave" style="font-size:12.5px">${esc(textoDaProva(p.prova))}</span>
+        </div>
+        ${botao ? `<div style="margin-top:6px">${botao}</div>` : ''}
       </div>`;
   }
   return `
@@ -87,6 +94,7 @@ async function carregar() {
   elLista.querySelectorAll('[data-declarar]').forEach((b) => {
     b.addEventListener('click', () => abrirDeclarar(b.dataset.declarar));
   });
+  ligarBotoesDocumento(elLista);
 }
 
 function abrirDeclarar(atividadeId) {

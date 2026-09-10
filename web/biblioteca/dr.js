@@ -47,11 +47,65 @@ function textoDaProva(prova) {
   if (!prova) return '';
   const partes = [];
   if (prova.protocolo) partes.push('protocolo ' + prova.protocolo);
+  if (prova.codigo_auth) partes.push('ref. ' + prova.codigo_auth);
   if (prova.titulo) partes.push('"' + prova.titulo + '"');
   if (prova.valor != null) partes.push(formatarDinheiro(prova.valor));
   if (prova.criada_em) partes.push(haQuanto(prova.criada_em));
   else if (prova.declarada_em) partes.push('declarada ' + haQuanto(prova.declarada_em));
   return partes.join(' · ');
+}
+
+// Documento real por trás de uma prova — nem toda teve um anexo (uma
+// vaga publicada é só uma linha na base, não um ficheiro), por isso o
+// botão só aparece quando existe um caminho mesmo. `anexo_caminho`
+// (bucket 'atividades', autodeclaração) e `arquivo_caminho` (bucket
+// 'documentos', tudo o resto assinado no Subsight) vivem em buckets
+// diferentes; a RLS de cada um já decide quem pode gerar o signed URL —
+// não é preciso verificar nada aqui.
+function caminhoDocumentoDaProva(prova) {
+  if (!prova) return null;
+  if (prova.arquivo_caminho) return { bucket: 'documentos', caminho: prova.arquivo_caminho };
+  if (prova.anexo_caminho) return { bucket: 'atividades', caminho: prova.anexo_caminho };
+  return null;
+}
+
+// Erro fica no próprio botão (mesmo espírito do resto do app: mensagens
+// inline, nunca alert()/confirm() nativos — um alert() em Chrome sem
+// cabeça também trava a página à espera de um clique que nunca vem).
+async function abrirDocumentoStorage(bucket, caminho, botao) {
+  const { data, error } = await sb.storage.from(bucket).createSignedUrl(caminho, 300);
+  if (error || !data) {
+    if (botao) {
+      const original = botao.innerHTML;
+      botao.textContent = 'Documento não encontrado';
+      botao.disabled = true;
+      setTimeout(() => { botao.innerHTML = original; botao.disabled = false; }, 3000);
+    }
+    return;
+  }
+  window.open(data.signedUrl, '_blank', 'noopener');
+}
+
+// Botão "Ver documento" — string vazia se esta prova não tiver nenhum
+// ficheiro por trás. `ligarBotoesDocumento` liga o clique depois de o
+// HTML entrar na página (mesmo padrão de data-declarar/data-alternar
+// já usado no resto do app).
+function botaoVerDocumento(prova) {
+  const ref = caminhoDocumentoDaProva(prova);
+  if (!ref) return '';
+  return `<button type="button" class="dr-botao dr-botao-linha dr-botao-pequeno"
+            data-ver-documento="${esc(ref.bucket)}|${esc(ref.caminho)}">
+    <span class="dr-icone dr-icone-16 i-documento" aria-hidden="true"></span>Ver documento</button>`;
+}
+
+function ligarBotoesDocumento(raiz) {
+  (raiz || document).querySelectorAll('[data-ver-documento]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const valor = btn.dataset.verDocumento;
+      const i = valor.indexOf('|');
+      abrirDocumentoStorage(valor.slice(0, i), valor.slice(i + 1), btn);
+    });
+  });
 }
 
 // ── selo de uma atividade ─────────────────────────────────────────────
