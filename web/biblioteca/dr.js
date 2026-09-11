@@ -64,26 +64,50 @@ function textoDaProva(prova) {
 // não é preciso verificar nada aqui.
 function caminhoDocumentoDaProva(prova) {
   if (!prova) return null;
-  if (prova.arquivo_caminho) return { bucket: 'documentos', caminho: prova.arquivo_caminho };
-  if (prova.anexo_caminho) return { bucket: 'atividades', caminho: prova.anexo_caminho };
+  if (prova.arquivo_caminho) {
+    return { bucket: 'documentos', caminho: prova.arquivo_caminho, nome: prova.arquivo_nome || 'Documento' };
+  }
+  if (prova.anexo_caminho) return { bucket: 'atividades', caminho: prova.anexo_caminho, nome: 'Anexo enviado' };
   return null;
 }
 
-// Erro fica no próprio botão (mesmo espírito do resto do app: mensagens
-// inline, nunca alert()/confirm() nativos — um alert() em Chrome sem
-// cabeça também trava a página à espera de um clique que nunca vem).
-async function abrirDocumentoStorage(bucket, caminho, botao) {
+// Janela única, criada na primeira vez que é precisa — assim nenhuma
+// página tem de lembrar-se de incluir o <dialog> no seu próprio HTML.
+function janelaDocumento() {
+  let d = document.getElementById('dr-janela-documento');
+  if (d) return d;
+  d = document.createElement('dialog');
+  d.id = 'dr-janela-documento';
+  d.className = 'dr-janela-documento';
+  d.innerHTML = `
+    <div class="dr-janela-cabeca">
+      <h2 id="dr-janela-documento-titulo">Documento</h2>
+      <button type="button" class="dr-icone-botao" aria-label="Fechar">
+        <span class="dr-icone i-fechar" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="dr-janela-corpo"><p class="dr-vazio">A abrir…</p></div>`;
+  document.body.appendChild(d);
+  d.querySelector('.dr-janela-cabeca button').addEventListener('click', () => d.close());
+  d.addEventListener('click', (ev) => { if (ev.target === d) d.close(); });
+  return d;
+}
+
+// Erro fica dentro da própria janela (mesmo espírito do resto do app:
+// mensagens inline, nunca alert() nativo).
+async function abrirDocumentoStorage(bucket, caminho, nome) {
+  const d = janelaDocumento();
+  const corpo = d.querySelector('.dr-janela-corpo');
+  d.querySelector('#dr-janela-documento-titulo').textContent = nome || 'Documento';
+  corpo.innerHTML = '<p class="dr-vazio">A abrir…</p>';
+  if (!d.open) d.showModal();
+
   const { data, error } = await sb.storage.from(bucket).createSignedUrl(caminho, 300);
   if (error || !data) {
-    if (botao) {
-      const original = botao.innerHTML;
-      botao.textContent = 'Documento não encontrado';
-      botao.disabled = true;
-      setTimeout(() => { botao.innerHTML = original; botao.disabled = false; }, 3000);
-    }
+    corpo.innerHTML = '<p class="dr-vazio">Não foi possível abrir o documento.</p>';
     return;
   }
-  window.open(data.signedUrl, '_blank', 'noopener');
+  corpo.innerHTML = `<iframe src="${esc(data.signedUrl)}" title="${esc(nome || 'Documento')}"></iframe>`;
 }
 
 // Botão "Ver documento" — string vazia se esta prova não tiver nenhum
@@ -94,7 +118,7 @@ function botaoVerDocumento(prova) {
   const ref = caminhoDocumentoDaProva(prova);
   if (!ref) return '';
   return `<button type="button" class="dr-botao dr-botao-linha dr-botao-pequeno"
-            data-ver-documento="${esc(ref.bucket)}|${esc(ref.caminho)}">
+            data-ver-documento="${esc(ref.bucket)}|${esc(ref.caminho)}" data-nome-documento="${esc(ref.nome)}">
     <span class="dr-icone dr-icone-16 i-documento" aria-hidden="true"></span>Ver documento</button>`;
 }
 
@@ -103,7 +127,7 @@ function ligarBotoesDocumento(raiz) {
     btn.addEventListener('click', () => {
       const valor = btn.dataset.verDocumento;
       const i = valor.indexOf('|');
-      abrirDocumentoStorage(valor.slice(0, i), valor.slice(i + 1), btn);
+      abrirDocumentoStorage(valor.slice(0, i), valor.slice(i + 1), btn.dataset.nomeDocumento);
     });
   });
 }

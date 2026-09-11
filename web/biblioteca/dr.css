@@ -406,6 +406,26 @@ dialog::backdrop { background: rgba(0,17,34,.5); }
   padding: var(--dr-e4) var(--dr-e5); border-top: 1px solid var(--dr-risca);
 }
 
+/* ── janela de documento (PDF a sério dentro do popup) ───────────────── */
+dialog.dr-janela-documento {
+  max-width: 900px; width: calc(100% - var(--dr-e5) * 2);
+  height: calc(100svh - var(--dr-e6) * 2);
+}
+.dr-janela-documento .dr-janela-corpo {
+  padding: 0; max-height: none; height: calc(100% - 65px);
+  display: flex; align-items: center; justify-content: center; background: var(--dr-cinza-neblina);
+}
+.dr-janela-documento iframe {
+  width: 100%; height: 100%; border: 0; display: block;
+}
+.dr-janela-documento .dr-vazio { padding: var(--dr-e6); }
+@media (max-width: 640px) {
+  dialog.dr-janela-documento {
+    width: 100%; height: 100svh; max-width: 100%; max-height: 100%;
+    border-radius: 0; margin: 0;
+  }
+}
+
 /* ── entrada (páginas privadas) ───────────────────────────────────── */
 .dr-a-verificar { min-height: 100svh; display: flex; align-items: center; justify-content: center; }
 .dr-entrada {
